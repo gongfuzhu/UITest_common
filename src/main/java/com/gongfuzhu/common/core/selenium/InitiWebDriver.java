@@ -27,7 +27,7 @@ public class InitiWebDriver {
      * @return
      */
 
-    public WebDriver localDriver(DriverManagerType type, Capabilities capabilities) {
+    public WebDriver localDriver(DriverManagerType type, Capabilities capabilities,boolean record) {
         WebDriver webDriver;
         WebDriverManager wd = WebDriverManager.getInstance(type).capabilities(capabilities);
         webDriver = wd.create();
@@ -37,7 +37,7 @@ public class InitiWebDriver {
         this.taskMode.set(new TaskMode(webDriver, wd));
 
 
-        return lisenner(webDriver).getWrappedDriver();
+        return listener(webDriver,record);
 
     }
 
@@ -47,7 +47,7 @@ public class InitiWebDriver {
      * @return
      */
 
-    public WebDriver dockerDriver(DriverManagerType type) {
+    public WebDriver dockerDriver(DriverManagerType type,boolean record) {
 
 
         WebDriver webDriver;
@@ -62,14 +62,15 @@ public class InitiWebDriver {
         generalSettings(webDriver);
         this.taskMode.set(new TaskMode(webDriver, wd));
 
-        return lisenner(webDriver).getWrappedDriver();
+        return listener(webDriver,record);
 
     }
 
-    private EventFiringWebDriver lisenner(WebDriver webDriver) {
-        SeleniumListener seleniumListener = new SeleniumListener();
+    private EventFiringWebDriver listener(WebDriver webDriver,boolean record) {
+        SeleniumListener seleniumListener = new SeleniumListener(record);
 
         EventFiringWebDriver eventFiringWebDriver = new EventFiringWebDriver(webDriver);
+
         return eventFiringWebDriver.register(seleniumListener);
 
     }

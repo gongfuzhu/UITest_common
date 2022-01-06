@@ -1,32 +1,38 @@
 package com.gongfuzhu.common.core.selenium.util;
 
 import com.gongfuzhu.common.core.tools.PictureTool;
+import lombok.extern.log4j.Log4j2;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 import java.awt.*;
 import java.io.File;
 
+@Log4j2
 public class WebDriverUtil {
 
 
 
-    public static void screenshot(WebDriver driver,String text,String fileName){
+    public static void screenshot(WebDriver driver,String text,String fileName,String savePath){
 
 
-        String path = ClassLoader.getSystemResource("").getPath();
 
 
-        File file = ((RemoteWebDriver) driver).getScreenshotAs(OutputType.FILE);
-        System.out.println("文件名称:"+fileName);
+        EventFiringWebDriver eventFiringWebDriver = new EventFiringWebDriver(driver);
 
-        File file1 = new File(path + fileName);
+        File file = eventFiringWebDriver.getScreenshotAs(OutputType.FILE);
 
-        file.renameTo(file1);
-        System.out.println(file1.getPath());
+        log.info("存储路径：{}",savePath);
+        File toFile = new File(savePath + File.separator+fileName);
 
-        PictureTool.addString(file1,text, Color.RED,new Font("宋体",Font.PLAIN,30));
+        log.info("文件存储路径：{}",toFile.getPath());
+
+        file.renameTo(toFile);
+
+        PictureTool.addString(toFile,text, Color.RED,new Font("宋体",Font.PLAIN,30));
 
 
     }
