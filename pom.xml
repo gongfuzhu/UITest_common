@@ -11,8 +11,8 @@
 
 
 	<groupId>com.gongfuzhu</groupId>
-	<artifactId>common</artifactId>
-	<name>common</name>
+	<artifactId>UITest_common</artifactId>
+	<name>UITest_common</name>
 	<description>Demo project for Spring Boot</description>
 
 	<dependencies>
