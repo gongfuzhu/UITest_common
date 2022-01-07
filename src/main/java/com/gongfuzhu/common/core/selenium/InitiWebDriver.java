@@ -1,18 +1,24 @@
 package com.gongfuzhu.common.core.selenium;
 
 import com.gongfuzhu.common.core.selenium.mode.TaskMode;
+import com.gongfuzhu.common.core.selenium.util.ChromeDevToolsUtils;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.DriverManagerType;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.v96.performance.model.Metric;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Log4j2
 public class InitiWebDriver {
 
 
@@ -28,7 +34,7 @@ public class InitiWebDriver {
      * @return
      */
 
-    public WebDriver localDriver(DriverManagerType type, ChromeOptions capabilities, boolean record) {
+    public EventFiringWebDriver localDriver(DriverManagerType type, ChromeOptions capabilities, boolean record) {
         WebDriver webDriver;
         WebDriverManager wd = WebDriverManager.getInstance(type).capabilities(capabilities);
         webDriver = wd.create();
@@ -48,7 +54,7 @@ public class InitiWebDriver {
      * @return
      */
 
-    public WebDriver dockerDriver(DriverManagerType type,boolean record) {
+    public EventFiringWebDriver dockerDriver(DriverManagerType type,boolean record) {
 
 
         WebDriver webDriver;
@@ -68,6 +74,10 @@ public class InitiWebDriver {
     }
 
     private EventFiringWebDriver listener(WebDriver webDriver,boolean record) {
+        ChromeDevToolsUtils chromeDevToolsUtils = new ChromeDevToolsUtils();
+        chromeDevToolsUtils.captureRequestSelenium((ChromeDriver) webDriver);
+
+
         SeleniumListener seleniumListener = new SeleniumListener(record);
 
         EventFiringWebDriver eventFiringWebDriver = new EventFiringWebDriver(webDriver);
@@ -87,6 +97,7 @@ public class InitiWebDriver {
 
         taskMode.getWebDriver().quit();
         taskMode.getWebDriverManager().quit();
+
 
     }
 

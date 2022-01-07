@@ -17,6 +17,9 @@ public class ChromeArguments {
 
     public static String iPhoneX ="--user-agent=iphone X";
 
+    //打开开发者工具F12
+    public static String devtools="--auto-open-devtools-for-tabs";
+
 
 
 
