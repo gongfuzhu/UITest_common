@@ -52,16 +52,15 @@ public class GeneralChromeOptions {
     /**
      * 加载H5
      */
-    public static DesiredCapabilities getH5Capabilities(){
-
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+    public static ChromeOptions getH5Capabilities(){
         HashMap<String, String> mobileEmulation  = new HashMap<>();
         String deviceName = "iPhone X";	//iPhone X/Galaxy S5
         mobileEmulation.put("deviceName",deviceName);
-        Map<String, Object> chromeOptions = new HashMap<>();
-        chromeOptions.put("mobileEmulation",mobileEmulation);
-        capabilities.setCapability(ChromeOptions.CAPABILITY,chromeOptions);
-        return capabilities;
+
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.setExperimentalOption("mobileEmulation",mobileEmulation);
+
+        return chromeOptions;
 
     }
 

@@ -6,6 +6,7 @@ import io.github.bonigarcia.wdm.config.DriverManagerType;
 import lombok.SneakyThrows;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class InitiWebDriver {
      * @return
      */
 
-    public WebDriver localDriver(DriverManagerType type, Capabilities capabilities,boolean record) {
+    public WebDriver localDriver(DriverManagerType type, ChromeOptions capabilities, boolean record) {
         WebDriver webDriver;
         WebDriverManager wd = WebDriverManager.getInstance(type).capabilities(capabilities);
         webDriver = wd.create();
