@@ -54,7 +54,7 @@ public class GeneralChromeOptions {
      */
     public static ChromeOptions getH5Capabilities(){
         HashMap<String, String> mobileEmulation  = new HashMap<>();
-        String deviceName = "iPhone X";	//iPhone X/Galaxy S5
+        String deviceName = "Galaxy S5";	//iPhone X/Galaxy S5
         mobileEmulation.put("deviceName",deviceName);
 
         ChromeOptions chromeOptions = new ChromeOptions();

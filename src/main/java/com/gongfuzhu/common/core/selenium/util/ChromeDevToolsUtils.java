@@ -6,19 +6,18 @@ import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.NetworkInterceptor;
-import org.openqa.selenium.devtools.v95.emulation.Emulation;
+
 import org.openqa.selenium.devtools.v95.log.Log;
 import org.openqa.selenium.devtools.v95.network.Network;
 import org.openqa.selenium.devtools.v95.network.model.RequestWillBeSent;
 import org.openqa.selenium.devtools.v95.network.model.ResponseReceived;
+import org.openqa.selenium.devtools.v96.emulation.Emulation;
 import org.openqa.selenium.devtools.v96.performance.Performance;
 import org.openqa.selenium.devtools.v96.performance.model.Metric;
 import org.openqa.selenium.remote.http.HttpResponse;
 import org.openqa.selenium.remote.http.Route;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static org.openqa.selenium.remote.http.Contents.utf8String;
