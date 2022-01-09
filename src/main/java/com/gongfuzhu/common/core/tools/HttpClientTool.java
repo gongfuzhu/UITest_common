@@ -1,6 +1,7 @@
 package com.gongfuzhu.common.core.tools;
 
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -20,8 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+@Log4j2
 public class HttpClientTool {
-    protected static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(HttpClientTool.class);
 
 
 
