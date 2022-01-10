@@ -28,7 +28,7 @@ public class HttpClientTool {
 
 
     @SneakyThrows
-    public String requesPost(String url, String body, Map<String, String> header) {
+    public static String requesPost(String url, String body, Map<String, String> header) {
 
         CloseableHttpClient client = HttpClients.createDefault();
         StringEntity stringEntity = new StringEntity(body, ContentType.APPLICATION_JSON);
@@ -56,7 +56,7 @@ public class HttpClientTool {
 
 
     @SneakyThrows
-    public String requesGet(String url, Header ...header) {
+    public static String requesGet(String url, Header ...header) {
         CloseableHttpClient client = HttpClients.createDefault();
 
         HttpGet httpGet = new HttpGet(url);
@@ -79,7 +79,7 @@ public class HttpClientTool {
     }
 
 
-    public static String unicodeToString(String str) {
+    private static String unicodeToString(String str) {
         log.info("请求结果：{}",str);
 
         if (str.isEmpty()){
