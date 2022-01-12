@@ -324,8 +324,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void onException(Throwable throwable, WebDriver driver) {
+        screenshot=true;
+        screenshot(driver, "出现异常");
         waitTime();
-        screenshot(driver, "出现异常:" + throwable.getMessage());
 
     }
 
