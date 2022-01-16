@@ -3,30 +3,27 @@ package com.gongfuzhu.common.core.selenium;
 import com.gongfuzhu.common.core.selenium.options.GeneralChromeOptions;
 import com.gongfuzhu.common.core.selenium.options.arguments.ChromeArguments;
 import com.gongfuzhu.common.core.selenium.util.WebDriverUtil;
+import com.gongfuzhu.common.core.tools.JarTool;
 import com.gongfuzhu.common.core.tools.PictureTool;
 import com.gongfuzhu.common.core.tools.SystemTool;
-import io.github.bonigarcia.wdm.config.DriverManagerType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
-import java.awt.*;
 import java.io.File;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @Log4j2
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SeleniumListener implements WebDriverEventListener {
 
     private int step = 1;
@@ -35,9 +32,8 @@ public class SeleniumListener implements WebDriverEventListener {
 
     private long time = 1000;
 
-    public SeleniumListener(boolean screenshot) {
-        this.screenshot = screenshot;
-    }
+    private String savePath;
+
 
     /**
      * 确认提示框之前
@@ -46,8 +42,8 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void beforeAlertAccept(WebDriver driver) {
-        waitTime();
-        screenshot(driver, "确认提示框之前");
+        log.info("步骤{}：确认提示框-before",step);
+        screenshot(driver, "确认提示框-before");
     }
 
     /**
@@ -57,19 +53,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterAlertAccept(WebDriver driver) {
+        log.info("步骤{}：确认提示框-after",step);
         waitTime();
-        screenshot(driver, "确认提示框之后");
-    }
-
-    /**
-     * 取消提示框之前
-     *
-     * @param driver
-     */
-    @Override
-    public void afterAlertDismiss(WebDriver driver) {
-        waitTime();
-        screenshot(driver, "取消提示框之前");
+        screenshot(driver, "确认提示框-after");
     }
 
     /**
@@ -78,9 +64,21 @@ public class SeleniumListener implements WebDriverEventListener {
      * @param driver
      */
     @Override
+    public void afterAlertDismiss(WebDriver driver) {
+        log.info("步骤{}：取消提示框-after",step);
+        screenshot(driver, "取消提示框-after");
+    }
+
+    /**
+     * 取消提示框之前
+     *
+     * @param driver
+     */
+    @Override
     public void beforeAlertDismiss(WebDriver driver) {
+        log.info("步骤{}：取消提示框-before",step);
         waitTime();
-        screenshot(driver, "取消提示框之后");
+        screenshot(driver, "取消提示框-before");
     }
 
     /**
@@ -91,9 +89,8 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void beforeNavigateTo(String url, WebDriver driver) {
-        waitTime();
-        log.info("即将跳转到:{}", url);
-        screenshot(driver, "打开url之前");
+        log.info("步骤{}：打开url-before:{}",step, url);
+        screenshot(driver, "打开url-before");
     }
 
     /**
@@ -104,9 +101,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterNavigateTo(String url, WebDriver driver) {
+        log.info("步骤{}：打开url-after:{}",step, url);
         waitTime();
-        System.out.println("已经跳转到:" + url);
-        screenshot(driver, "打开url之后");
+        screenshot(driver, "打开url-after");
     }
 
     /**
@@ -116,8 +113,8 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void beforeNavigateBack(WebDriver driver) {
-        waitTime();
-        screenshot(driver, "后退之前");
+        log.info("步骤{}：后退-before",step);
+        screenshot(driver, "后退-before");
     }
 
     /**
@@ -127,8 +124,8 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterNavigateBack(WebDriver driver) {
-        waitTime();
-        screenshot(driver, "后退之后");
+        log.info("步骤{}：后退-after",step);
+        screenshot(driver, "后退-after");
 
     }
 
@@ -140,8 +137,8 @@ public class SeleniumListener implements WebDriverEventListener {
     @Override
     public void beforeNavigateForward(WebDriver driver) {
 
-        waitTime();
-        screenshot(driver, "前进之前");
+        log.info("步骤{}：前进-before",step);
+        screenshot(driver, "前进-before");
     }
 
     /**
@@ -152,8 +149,9 @@ public class SeleniumListener implements WebDriverEventListener {
     @Override
     public void afterNavigateForward(WebDriver driver) {
 
+        log.info("步骤{}：前进-after",step);
         waitTime();
-        screenshot(driver, "前进之后");
+        screenshot(driver, "前进-after");
     }
 
     /**
@@ -164,8 +162,8 @@ public class SeleniumListener implements WebDriverEventListener {
     @Override
     public void beforeNavigateRefresh(WebDriver driver) {
 
-        waitTime();
-        screenshot(driver, "刷新之前");
+        log.info("步骤{}：刷新-before",step);
+        screenshot(driver, "刷新-before");
     }
 
     /**
@@ -176,8 +174,9 @@ public class SeleniumListener implements WebDriverEventListener {
     @Override
     public void afterNavigateRefresh(WebDriver driver) {
 
+        log.info("步骤{}：刷新-after",step);
         waitTime();
-        screenshot(driver, "刷新之后");
+        screenshot(driver, "刷新-after");
     }
 
     /**
@@ -189,8 +188,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void beforeFindBy(By by, WebElement element, WebDriver driver) {
-        waitTime();
-        screenshot(driver, "查找元素之前");
+
+        log.info("步骤{}：通过{}查找元素-before",step,by);
+        screenshot(driver, "查找元素-before");
     }
 
     /**
@@ -202,9 +202,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterFindBy(By by, WebElement element, WebDriver driver) {
-
+        log.info("步骤{}：通过{}查找元素{}-after",step,by.toString(),element.getText());
         waitTime();
-        screenshot(driver, "查找元素之后");
+        screenshot(driver, "查找元素-after");
     }
 
     /**
@@ -216,10 +216,10 @@ public class SeleniumListener implements WebDriverEventListener {
     @SneakyThrows
     @Override
     public void beforeClickOn(WebElement element, WebDriver driver) {
-        waitTime();
 
 
-        screenshot(driver, "点击之前");
+        log.info("步骤{}：点击元素{}-before",step,element.getText());
+        screenshot(driver, "点击-before");
 
     }
 
@@ -231,8 +231,8 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterClickOn(WebElement element, WebDriver driver) {
-        waitTime();
-        screenshot(driver, "点击之后");
+        log.info("步骤{}：点击元素{}-after",step,element.getText());
+        screenshot(driver, "点击-after");
 
     }
 
@@ -245,8 +245,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void beforeChangeValueOf(WebElement element, WebDriver driver, CharSequence[] keysToSend) {
+        log.info("步骤{}：在元素{}中输入{}-before",step,element.getText(),keysToSend);
         waitTime();
-        screenshot(driver, "输入值之前");
+        screenshot(driver, "输入值-before");
 
     }
 
@@ -259,9 +260,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterChangeValueOf(WebElement element, WebDriver driver, CharSequence[] keysToSend) {
-
+        log.info("步骤{}：在元素{}中输入{}-after",step,element.getText(),keysToSend);
         waitTime();
-        screenshot(driver, "输入值之后");
+        screenshot(driver, "输入值-after");
     }
 
     /**
@@ -272,8 +273,8 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void beforeScript(String script, WebDriver driver) {
-        waitTime();
-        screenshot(driver, "执行脚本之前");
+        log.info("步骤{}：执行脚本{}-before",step,script);
+        screenshot(driver, "执行脚本-before");
 
     }
 
@@ -285,8 +286,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterScript(String script, WebDriver driver) {
+        log.info("步骤{}：执行脚本{}-after",step,script);
         waitTime();
-        screenshot(driver, "执行脚本之后");
+        screenshot(driver, "执行脚本-after");
 
     }
 
@@ -298,8 +300,8 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void beforeSwitchToWindow(String windowName, WebDriver driver) {
-        waitTime();
-        screenshot(driver, "切换窗口之前");
+        log.info("步骤{}：切换到窗口{}-before",step,windowName);
+        screenshot(driver, "切换窗口-before");
 
     }
 
@@ -311,8 +313,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterSwitchToWindow(String windowName, WebDriver driver) {
+        log.info("步骤{}：切换到窗口{}-after",step,windowName);
         waitTime();
-        screenshot(driver, "切换窗口之后");
+        screenshot(driver, "切换窗口-after");
 
     }
 
@@ -325,8 +328,8 @@ public class SeleniumListener implements WebDriverEventListener {
     @Override
     public void onException(Throwable throwable, WebDriver driver) {
         screenshot=true;
+        log.info("步骤{}：出现异常{}",step,throwable.getMessage());
         screenshot(driver, "出现异常");
-        waitTime();
 
     }
 
@@ -338,7 +341,7 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public <X> void beforeGetScreenshotAs(OutputType<X> target) {
-        waitTime();
+        log.info("步骤{}：执行截图-before",step);
 
     }
 
@@ -351,8 +354,7 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public <X> void afterGetScreenshotAs(OutputType<X> target, X screenshot) {
-        waitTime();
-
+        log.info("步骤{}：执行截图-after",step);
 
     }
 
@@ -364,8 +366,8 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void beforeGetText(WebElement element, WebDriver driver) {
-        waitTime();
-        screenshot(driver, "获取文本之前");
+        log.info("步骤{}：获取元素本文{}-before",step);
+        screenshot(driver, "获取文本-before");
 
     }
 
@@ -378,8 +380,9 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterGetText(WebElement element, WebDriver driver, String text) {
+        log.info("步骤{}：获取元素本文{}-after",step);
         waitTime();
-        screenshot(driver, "获取文本之后");
+        screenshot(driver, "获取文本-after");
 
     }
 
@@ -396,7 +399,7 @@ public class SeleniumListener implements WebDriverEventListener {
         log.info("截图方法被执行：{}",screenshot);
 
         if (!screenshot) {
-
+            step++;
             return;
         }
 
@@ -408,18 +411,21 @@ public class SeleniumListener implements WebDriverEventListener {
 
 
         String content = no + " " + text;
-//        String path = SystemTool.getPath();
 
 
-        String jarPath = SystemTool.getJarPath();
+//        File file3 = new File(this.getClass().getResource("/").getPath());
 
-        WebDriverUtil.screenshot(driver, content, fileName,jarPath);
+//        log.info("文件路径：",file3.getPath());
 
+//        String jarPath = SystemTool.getJarPath();
+//        String jarPath= JarTool.getJarDir();
+
+        WebDriverUtil.screenshot(driver, content, fileName,savePath);
         step++;
 
 
-    }
 
+    }
 
 
 
