@@ -34,7 +34,7 @@ public class InitiWebDriver {
      * @return
      */
 
-    public EventFiringWebDriver localDriver(DriverManagerType type, ChromeOptions capabilities, boolean record) {
+    public WebDriver localDriver(DriverManagerType type, ChromeOptions capabilities) {
         WebDriver webDriver;
         WebDriverManager wd = WebDriverManager.getInstance(type).capabilities(capabilities);
         webDriver = wd.create();
@@ -44,7 +44,7 @@ public class InitiWebDriver {
         this.taskMode.set(new TaskMode(webDriver, wd));
 
 
-        return listener(webDriver,record);
+        return webDriver;
 
     }
 
@@ -54,7 +54,7 @@ public class InitiWebDriver {
      * @return
      */
 
-    public EventFiringWebDriver dockerDriver(DriverManagerType type,boolean record) {
+    public WebDriver dockerDriver(DriverManagerType type) {
 
 
         WebDriver webDriver;
@@ -69,22 +69,10 @@ public class InitiWebDriver {
         generalSettings(webDriver);
         this.taskMode.set(new TaskMode(webDriver, wd));
 
-        return listener(webDriver,record);
+        return webDriver;
 
     }
 
-    private EventFiringWebDriver listener(WebDriver webDriver,boolean record) {
-        ChromeDevToolsUtils chromeDevToolsUtils = new ChromeDevToolsUtils();
-        chromeDevToolsUtils.captureRequestSelenium((ChromeDriver) webDriver);
-
-
-        SeleniumListener seleniumListener = new SeleniumListener(record);
-
-        EventFiringWebDriver eventFiringWebDriver = new EventFiringWebDriver(webDriver);
-
-        return eventFiringWebDriver.register(seleniumListener);
-
-    }
 
     @SneakyThrows
     public void closeDriver() {

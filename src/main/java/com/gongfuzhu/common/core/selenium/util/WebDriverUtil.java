@@ -29,34 +29,34 @@ import static org.openqa.selenium.remote.http.Contents.utf8String;
 public class WebDriverUtil {
 
 
-
-    public static void screenshot(WebDriver driver,String text,String fileName,String savePath){
-
-
+    public static void screenshot(WebDriver driver, String text, String fileName, String savePath) {
 
 
         EventFiringWebDriver eventFiringWebDriver = new EventFiringWebDriver(driver);
 
         File file = eventFiringWebDriver.getScreenshotAs(OutputType.FILE);
+        if (null !=savePath) {
 
-        log.info("存储路径：{}",savePath);
-        File toFile = new File(savePath + File.separator+fileName);
+            File file1 = new File(savePath);
+            file1.mkdir();
 
-        log.info("文件存储路径：{}",toFile.getPath());
+            File toFile = new File(file1.getAbsoluteFile()+ File.separator + fileName);
 
-        file.renameTo(toFile);
+            log.info("文件存储路径：{}", toFile.getAbsoluteFile());
 
-        PictureTool.addString(toFile,text, Color.RED,new Font("宋体",Font.PLAIN,30));
+            file.renameTo(toFile);
+
+            PictureTool.addString(toFile, text, Color.RED, new Font("宋体", Font.PLAIN, 30));
+
+        }else {
+
+            log.info("文件存储路径：{}", file.getPath());
+            PictureTool.addString(file, text, Color.RED, new Font("宋体", Font.PLAIN, 30));
+        }
+
 
 
     }
-
-
-
-
-
-
-
 
 
 }
