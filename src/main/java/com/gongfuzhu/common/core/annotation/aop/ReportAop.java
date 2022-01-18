@@ -46,6 +46,7 @@ public class ReportAop {
         String jarDir =System.getProperty("user.dir")+File.separator+annotation.fileName();
 
         long delayTime = annotation.delayTime();
+        boolean screen = annotation.screen();
         SeleniumListener seleniumListener = new SeleniumListener();
         EventFiringWebDriver eventFiringWebDriver =null;
         Object[] args = pjp.getArgs();
@@ -53,7 +54,7 @@ public class ReportAop {
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof WebDriver){
                 seleniumListener.setTime(delayTime);
-                seleniumListener.setScreenshot(true);
+                seleniumListener.setScreenshot(screen);
                 seleniumListener.setSavePath(jarDir);
                 eventFiringWebDriver = new EventFiringWebDriver((WebDriver) args[1]);
                 eventFiringWebDriver.register(seleniumListener);

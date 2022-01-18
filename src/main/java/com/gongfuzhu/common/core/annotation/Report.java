@@ -12,6 +12,8 @@ public @interface Report {
 
     long delayTime() default 0;
 
+    boolean screen() default false;
+
 
 
 }

@@ -202,7 +202,7 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterFindBy(By by, WebElement element, WebDriver driver) {
-        log.info("步骤{}：通过{}查找元素{}-after",step,by.toString(),element.getText());
+        log.info("步骤{}：通过{}查找元素{}-after",step,by.toString());
         waitTime();
         screenshot(driver, "查找元素-after");
     }
@@ -218,7 +218,7 @@ public class SeleniumListener implements WebDriverEventListener {
     public void beforeClickOn(WebElement element, WebDriver driver) {
 
 
-        log.info("步骤{}：点击元素{}-before",step,element.getText());
+        log.info("步骤{}：点击元素{}-before",step);
         screenshot(driver, "点击-before");
 
     }
@@ -231,7 +231,7 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterClickOn(WebElement element, WebDriver driver) {
-        log.info("步骤{}：点击元素{}-after",step,element.getText());
+        log.info("步骤{}：点击元素{}-after",step);
         screenshot(driver, "点击-after");
 
     }
@@ -245,7 +245,7 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void beforeChangeValueOf(WebElement element, WebDriver driver, CharSequence[] keysToSend) {
-        log.info("步骤{}：在元素{}中输入{}-before",step,element.getText(),keysToSend);
+        log.info("步骤{}：在元素中输入{}-before",step,keysToSend);
         waitTime();
         screenshot(driver, "输入值-before");
 
@@ -260,7 +260,7 @@ public class SeleniumListener implements WebDriverEventListener {
      */
     @Override
     public void afterChangeValueOf(WebElement element, WebDriver driver, CharSequence[] keysToSend) {
-        log.info("步骤{}：在元素{}中输入{}-after",step,element.getText(),keysToSend);
+        log.info("步骤{}：在元素中输入{}-after",step,keysToSend);
         waitTime();
         screenshot(driver, "输入值-after");
     }

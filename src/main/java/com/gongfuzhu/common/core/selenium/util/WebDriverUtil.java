@@ -15,6 +15,8 @@ import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.remote.http.HttpResponse;
 import org.openqa.selenium.remote.http.Route;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.awt.*;
 import java.io.File;
@@ -57,6 +59,25 @@ public class WebDriverUtil {
 
 
     }
+
+    /**
+     * 等到元素可以点击
+     * @param webDriver
+     * @param webElement
+     */
+    public static  void elementToBeClickable(WebDriver webDriver,WebElement webElement){
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 60);
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(webElement));
+
+    }
+//    public static  void elementToBeClickable(WebDriver webDriver,WebElement webElement){
+//        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 60);
+//        webDriverWait.until(ExpectedConditions.elementToBeClickable(webElement));
+
+//    }
+
+
+
 
 
 }
