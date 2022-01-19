@@ -15,6 +15,7 @@ import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.remote.http.HttpResponse;
 import org.openqa.selenium.remote.http.Route;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -66,15 +67,24 @@ public class WebDriverUtil {
      * @param webElement
      */
     public static  void elementToBeClickable(WebDriver webDriver,WebElement webElement){
-        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 60);
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 20);
         webDriverWait.until(ExpectedConditions.elementToBeClickable(webElement));
 
     }
-//    public static  void elementToBeClickable(WebDriver webDriver,WebElement webElement){
-//        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 60);
-//        webDriverWait.until(ExpectedConditions.elementToBeClickable(webElement));
 
-//    }
+    public static  void presenceOfElementLocated(WebDriver webDriver,By by){
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 20);
+        webDriverWait.until(ExpectedConditions.presenceOfElementLocated(by));
+
+    }
+    public static  void presenceOfElement(WebDriver webDriver,WebElement webElement){
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, 20);
+        webDriverWait.withMessage("");
+        webDriverWait.until(ExpectedConditions.refreshed(ExpectedConditions.refreshed(ExpectedConditions.alertIsPresent())));
+        ExpectedCondition<WebElement> refreshed = ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(webElement));
+//        refreshed.
+
+    }
 
 
 
