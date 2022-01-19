@@ -1,11 +1,6 @@
 package com.gongfuzhu.common.core.selenium;
 
-import com.gongfuzhu.common.core.selenium.options.GeneralChromeOptions;
-import com.gongfuzhu.common.core.selenium.options.arguments.ChromeArguments;
 import com.gongfuzhu.common.core.selenium.util.WebDriverUtil;
-import com.gongfuzhu.common.core.tools.JarTool;
-import com.gongfuzhu.common.core.tools.PictureTool;
-import com.gongfuzhu.common.core.tools.SystemTool;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,10 +12,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverEventListener;
 
-import java.io.File;
 
 
-@Log4j2
+@Log4j2(topic = "eventListener")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
