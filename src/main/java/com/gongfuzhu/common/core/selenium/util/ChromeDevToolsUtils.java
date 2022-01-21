@@ -38,10 +38,11 @@ public class ChromeDevToolsUtils {
 
     /**
      * 网络监听
+     *
      * @param driver
      */
 
-    public void captureRequestSelenium(ChromeDriver driver) {
+    public static void captureRequestSelenium(ChromeDriver driver) {
 
         Object browserVersion = driver.getCapabilities().getCapability("browserVersion");
 
@@ -49,13 +50,19 @@ public class ChromeDevToolsUtils {
         devTools.createSession();
         devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
         devTools.addListener(Network.requestWillBeSent(),
-                requestWillBeSent ->
+                requestWillBeSent -> {
+                    log.info("******************************************请求*************************************************");
+                    log.info("请求参数：{}",devTools.send(Network.getRequestPostData(requestWillBeSent.getRequestId())));
+                    log.info("请求url：{}",requestWillBeSent.getRequest().getUrl());
 
-                        request(requestWillBeSent)
+                }
+
         );
-        devTools.addListener(Network.responseReceived(), responseReceived ->
-
-                response(responseReceived)
+        devTools.addListener(Network.responseReceived(), responseReceived -> {
+            log.info("******************************************响应*************************************************");
+            log.info("响应URL：{}",responseReceived.getResponse().getUrl());
+            log.info("响应参数：{}",devTools.send(Network.getResponseBody(responseReceived.getRequestId())).getBody());
+                }
 
 
         );
@@ -65,30 +72,30 @@ public class ChromeDevToolsUtils {
 
     /**
      * 获取指定请求的出入参（待验证）
+     *
      * @param webDriver
      * @param urlPattern
      */
-    public static void urlBody(WebDriver webDriver,String urlPattern){
+    public static void urlBody(WebDriver webDriver, String urlPattern) {
         DevTools devTools = ((ChromeDriver) webDriver).getDevTools();
         devTools.createSessionIfThereIsNotOne();
 
 
-        List<RequestPattern> requestPatterns = List.of(new RequestPattern(Optional.of(urlPattern), Optional.empty(), Optional.empty()), new RequestPattern(Optional.of(urlPattern), Optional.empty(),Optional.empty()));
-        devTools.send(Fetch.enable(Optional.of(requestPatterns),Optional.empty()));
-        devTools.addListener(Fetch.requestPaused(),request-> {
+        List<RequestPattern> requestPatterns = List.of(new RequestPattern(Optional.of(urlPattern), Optional.empty(), Optional.empty()), new RequestPattern(Optional.of(urlPattern), Optional.empty(), Optional.empty()));
+        devTools.send(Fetch.enable(Optional.of(requestPatterns), Optional.empty()));
+        devTools.addListener(Fetch.requestPaused(), request -> {
             RequestId requestId = request.getRequestId();
             Optional<String> postData = request.getRequest().getPostData();
-            log.info("请求数据：{}",postData.get());
-            System.out.println(String.format("请求数据：%s",postData.get()));
+            log.info("请求数据：{}", postData.get());
+            System.out.println(String.format("请求数据：%s", postData.get()));
             devTools.send(Fetch.continueRequest(request.getRequestId(),
-                            Optional.of(request.getRequest().getUrl()),
-                            Optional.of(request.getRequest().getMethod()),
-                            Optional.of(request.getRequest().getPostData().get()),
-                           Optional.of(request.getResponseHeaders().get()),
-                            Optional.of(true)));
+                    Optional.of(request.getRequest().getUrl()),
+                    Optional.of(request.getRequest().getMethod()),
+                    Optional.of(request.getRequest().getPostData().get()),
+                    Optional.of(request.getResponseHeaders().get()),
+                    Optional.of(true)));
             Fetch.GetResponseBodyResponse send = devTools.send(Fetch.getResponseBody(requestId));
-            log.info("响应数据：{}",send.getBody());
-
+            log.info("响应数据：{}", send.getBody());
 
 
         });
@@ -99,21 +106,22 @@ public class ChromeDevToolsUtils {
     /**
      * 监听console
      */
-    public  void consoleLinsen(ChromeDriver driver){
+    public void consoleLinsen(ChromeDriver driver) {
 
         DevTools devTools = driver.getDevTools();
         devTools.createSession();
         devTools.send(Log.enable());
         devTools.addListener(Log.entryAdded(),
                 logEntry -> {
-                    log.info("text：{}",logEntry.getText());
-                    log.info("log:{}"+logEntry.getText());
-                    log.info("level:{}"+logEntry.getLevel());
+                    log.info("text：{}", logEntry.getText());
+                    log.info("log:{}" + logEntry.getText());
+                    log.info("level:{}" + logEntry.getLevel());
                 });
     }
 
     /**
      * 获取性能指标
+     *
      * @param driver
      * @return
      */
@@ -133,7 +141,7 @@ public class ChromeDevToolsUtils {
     }
 
 
-    public void phone(ChromeDriver driver){
+    public void phone(ChromeDriver driver) {
 
         DevTools devTools = driver.getDevTools();
         devTools.createSession();
@@ -154,11 +162,11 @@ public class ChromeDevToolsUtils {
 
     }
 
-    public static void networ(ChromeDriver driver){
+    public static void networ(ChromeDriver driver) {
         NetworkInterceptor interceptor = new NetworkInterceptor(
                 driver,
                 Route.matching(req -> req.getUri().equals(""))
-                        .to(() -> req ->  new HttpResponse()
+                        .to(() -> req -> new HttpResponse()
                                 .setStatus(200)
                                 .addHeader("Content-Type", MediaType.HTML_UTF_8.toString())
                                 .setContent(utf8String("Creamy, delicious cheese!"))));
@@ -195,12 +203,10 @@ public class ChromeDevToolsUtils {
     }
 
 
-
-
     private void request(RequestWillBeSent requestWillBeSent) {
 
         log.info("请求id：{}", requestWillBeSent.getRequestId());
-        log.info("请求url：{}",requestWillBeSent.getRequest().getUrl());
+        log.info("请求url：{}", requestWillBeSent.getRequest().getUrl());
         log.info("请求头：{}", requestWillBeSent.getRequest().getHeaders().toJson());
         log.info("请求内容：{}", requestWillBeSent.getRequest().getPostData().toString());
 
@@ -208,7 +214,6 @@ public class ChromeDevToolsUtils {
     }
 
     private void response(ResponseReceived responseReceived) {
-
 
 
     }
