@@ -1,6 +1,7 @@
 package com.gongfuzhu.common.core.selenium.options;
 
 import com.gongfuzhu.common.core.selenium.options.arguments.ChromeArguments;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -24,6 +25,7 @@ public class GeneralChromeOptions {
         chromeOptions.addArguments( ChromeArguments.disableBlinkFeatures, ChromeArguments.automationControlled);
         //禁止弹窗提示
         chromeOptions.setExperimentalOption("excludeSwitches",new String[]{"enable-automation"});
+        chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
 
         return chromeOptions;
 
@@ -43,6 +45,7 @@ public class GeneralChromeOptions {
         chromeOptions.addArguments(ChromeArguments.userDataDir, ChromeArguments.disableBlinkFeatures, ChromeArguments.automationControlled);
         //禁止弹窗提示
         chromeOptions.setExperimentalOption("excludeSwitches",new String[]{"enable-automation"});
+        chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
 
         return chromeOptions;
 
@@ -59,6 +62,7 @@ public class GeneralChromeOptions {
 
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.setExperimentalOption("mobileEmulation",mobileEmulation);
+        chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
 
         return chromeOptions;
 
