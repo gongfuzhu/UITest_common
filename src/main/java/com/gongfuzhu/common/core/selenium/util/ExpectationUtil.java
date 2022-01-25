@@ -6,6 +6,8 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,5 +41,21 @@ public class ExpectationUtil {
 
             }
         };
+    }
+
+    /**
+     * 检查元素文本内容
+     * @param wait
+     * @param element
+     */
+    public static String logElmentText(WebDriverWait wait,WebElement element){
+
+        WebElement webElement = wait.until(ExpectedConditions.visibilityOf(element));
+        log.info("检查元素：{}",webElement.getText());
+
+
+        return webElement.getText();
+
+
     }
 }
