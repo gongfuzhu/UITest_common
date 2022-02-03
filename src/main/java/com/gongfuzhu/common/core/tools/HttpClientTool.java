@@ -79,7 +79,7 @@ public class HttpClientTool {
     }
 
 
-    private static String unicodeToString(String str) {
+    public static String unicodeToString(String str) {
         log.info("请求结果：{}",str);
 
         if (str.isEmpty()){

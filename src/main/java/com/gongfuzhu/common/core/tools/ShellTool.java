@@ -16,7 +16,7 @@ import java.io.*;
 public class ShellTool {
 
 
-    public Connection login(String host, File file) {
+    public static Connection login(String host, File file) {
 
 
         Connection connection = new Connection(host);
@@ -49,7 +49,7 @@ public class ShellTool {
      * @return
      * @throws Exception
      */
-    public StringBuilder exec2(String host, File file, String cmds) throws Exception {
+    public static StringBuilder exec2(String host, File file, String cmds) throws Exception {
 
         Connection conn = login(host, file);
         InputStream stdOut = null;
@@ -92,7 +92,7 @@ public class ShellTool {
     }
 
 
-    public String execShell(Connection connection, String shell) {
+    public static String execShell(Connection connection, String shell) {
 
         if (shell.startsWith("rm")) {
             return ShellType.Faile.remark;
@@ -119,7 +119,7 @@ public class ShellTool {
      * 消费inputstream，并返回
      */
     @SneakyThrows
-    public StringBuilder consumeInputStream(InputStream is) {
+    public static StringBuilder consumeInputStream(InputStream is) {
 
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
