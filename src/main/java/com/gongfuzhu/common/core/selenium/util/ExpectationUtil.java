@@ -1,10 +1,7 @@
 package com.gongfuzhu.common.core.selenium.util;
 
 import lombok.extern.log4j.Log4j2;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -24,22 +21,19 @@ public class ExpectationUtil {
      */
     public static ExpectedCondition<Boolean> invisibilityOfElementWithReminder(WebElement webElement) {
 
-        return new ExpectedCondition<Boolean>() {
-            @Override
-            public Boolean apply(WebDriver driver) {
-                driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
-                try {
-                    log.info("提示：{}", webElement.getText());
-                    return false;
-                } catch (NoSuchElementException e) {
-                    return true;
-                } catch (StaleElementReferenceException e) {
-                    return true;
-                } finally {
-                    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-                }
-
+        return driver -> {
+            driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
+            try {
+                log.info("提示：{}", webElement.getText());
+                return false;
+            } catch (NoSuchElementException e) {
+                return true;
+            } catch (StaleElementReferenceException e) {
+                return true;
+            } finally {
+                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             }
+
         };
     }
 
