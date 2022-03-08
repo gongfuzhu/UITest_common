@@ -5,7 +5,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,9 +20,9 @@ public class VerificationCode {
      *
      * @return
      */
-    public static String login() {
+    public static String login(String account, String pwd) {
 
-        String requesGet = HttpClientTool.requesGet("http://api.weilai.best/login?username=gongfuzhu&password=admin123456");
+        String requesGet = HttpClientTool.requesGet(String.format("http://api.weilai.best/login?username=%s&password=%s", account, pwd));
         String token = null;
         token = JsonPath.read(requesGet, "$.token");
         Assert.isTrue(JsonPath.read(requesGet, "$.code").equals("ok"), "业务异常");
@@ -50,29 +49,37 @@ public class VerificationCode {
 
     /**
      * {"code":"ok","requestid":"236573","phone":"15607045713","residual":"149"}
+     * 获取号码
      *
      * @param token
      * @return
      */
-    public static String getPhone(String token, String productId){
+    public static String getPhone(String token, String productId) {
 
 
         String url = "http://app.weilai.best/getphone?token=" + token + "&id=" + productId + "&operator=1&province=%E4%B8%8D%E9%99%90&phone=&autoblack=true";
 
         String requesGet = HttpClientTool.requesGet(url);
-        Assert.isTrue(!JsonPath.read(requesGet,"$.residual").equals("0"), "residual 值为0 停止使用");
+        Assert.isTrue(!JsonPath.read(requesGet, "$.residual").equals("0"), "residual 值为0 停止使用");
 
         return requesGet;
 
     }
 
+    /**
+     * 获取短信
+     *
+     * @param token
+     * @param requestid
+     * @return
+     */
     public static String getmessage(String token, String requestid) {
 
         String url = String.format("http://api.weilai.best/getmessage?token=%s&requestid=%s", token, requestid);
         for (int i = 0; i < 20; i++) {
             String requesGet = HttpClientTool.requesGet(url);
-            if (JsonPath.read(requesGet,"$.code").equals("ok") && !JsonPath.read(requesGet,"$.sms").equals("")) {
-                return JsonPath.read(requesGet,"$.sms");
+            if (JsonPath.read(requesGet, "$.code").equals("ok") && !JsonPath.read(requesGet, "$.sms").equals("")) {
+                return JsonPath.read(requesGet, "$.sms");
             }
             try {
                 Thread.sleep(2000);
@@ -85,6 +92,12 @@ public class VerificationCode {
         return null;
     }
 
+    /**
+     * 释放号码
+     *
+     * @param token
+     * @param requestid
+     */
     public static void freePhone(String token, String requestid) {
         log.info("释放手机号");
         String url = String.format("http://api.weilai.best/freephone?token=%s&requestid=%s", token, requestid);
@@ -92,24 +105,14 @@ public class VerificationCode {
 
     }
 
-    public static Map<String, String> aiwenzhe() {
-        String token = login();
-        String phone = getPhone(token, "22819");
-
-
-        String requestid = JsonPath.read(phone,"$.requestid");
-        String no = JsonPath.read(phone,"$.phone");
-
-        return Map.of("phone", String.valueOf(no), "requestid", String.valueOf(requestid));
-    }
-
-    public static String aiwenzheCode(String token, String requestid){
-        String getmessage = getmessage(token, String.valueOf(requestid));
-        return code(getmessage, 6);
-
-    }
-
-    private static String code(String body, int lenth) {
+    /**
+     * 获取验证码
+     *
+     * @param body
+     * @param lenth
+     * @return
+     */
+    public static String code(String body, int lenth) {
         Pattern p = Pattern.compile("(?<![0-9])([0-9]{" + lenth + "})(?![0-9])");
         Matcher m = p.matcher(body);
         if (m.find()) {
