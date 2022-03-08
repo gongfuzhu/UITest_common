@@ -23,8 +23,7 @@ public class VerificationCode {
     public static String login(String account, String pwd) {
 
         String requesGet = HttpClientTool.requesGet(String.format("http://api.weilai.best/login?username=%s&password=%s", account, pwd));
-        String token = null;
-        token = JsonPath.read(requesGet, "$.token");
+        String token = JsonPath.read(requesGet, "$.token");
         Assert.isTrue(JsonPath.read(requesGet, "$.code").equals("ok"), "业务异常");
 
         return token;
@@ -40,9 +39,8 @@ public class VerificationCode {
 
         String url = String.format("http://api.weilai.best/getmoney?token=%s", token);
         String requesGet = HttpClientTool.requesGet(url);
-        String account = null;
         Assert.isTrue(JsonPath.read(requesGet, "$.code").equals("ok"), "业务异常");
-        account = JsonPath.read(requesGet, "$.money");
+        String account = JsonPath.read(requesGet, "$.money");
         return account;
 
     }
